@@ -7,7 +7,7 @@ import com.example.petproject2.persistance.entity.MongoEntity.MongoCustomer;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoProduct;
 import com.example.petproject2.persistance.repository.mongorepository.CustomerMongoRepository;
 import com.example.petproject2.persistance.repository.mongorepository.ProductMongoRepository;
-import com.example.petproject2.presentation_layer.mapper.MainMapper;
+import com.example.petproject2.presentation.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

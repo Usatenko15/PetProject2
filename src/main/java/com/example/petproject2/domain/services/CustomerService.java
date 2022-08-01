@@ -1,7 +1,6 @@
 package com.example.petproject2.domain.services;
 
 import com.example.petproject2.domain.model.CustomerModel;
-import com.example.petproject2.presentation_layer.DTO.CustomerDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

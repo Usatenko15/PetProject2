@@ -1,8 +1,8 @@
-package com.example.petproject2.presentation_layer.controllers;
+package com.example.petproject2.presentation.controllers;
 
 import com.example.petproject2.domain.services.CustomerService;
-import com.example.petproject2.presentation_layer.DTO.CustomerDTO;
-import com.example.petproject2.presentation_layer.mapper.MainMapper;
+import com.example.petproject2.presentation.DTO.CustomerDTO;
+import com.example.petproject2.presentation.mapper.MainMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

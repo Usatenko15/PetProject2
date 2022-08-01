@@ -1,12 +1,8 @@
 package com.example.petproject2.domain.services;
 
 import com.example.petproject2.domain.model.CustomerModel;
-import com.example.petproject2.persistance.repository.DynamoRepository;
 import com.example.petproject2.persistance.repository.PostgresRepository;
-import com.example.petproject2.presentation_layer.DTO.CustomerDTO;
-import com.example.petproject2.presentation_layer.mapper.MainMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

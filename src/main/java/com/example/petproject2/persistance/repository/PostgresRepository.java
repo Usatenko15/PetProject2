@@ -9,7 +9,7 @@ import com.example.petproject2.persistance.entity.PostgresEntity.Product;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerProductRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.ProductRepository;
-import com.example.petproject2.presentation_layer.mapper.MainMapper;
+import com.example.petproject2.presentation.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
