@@ -1,40 +1,35 @@
 package com.example.petproject2.persistance.repository;
 
-import com.example.petproject2.persistance.mappers.PostgresMapper;
 import com.example.petproject2.domain.model.CustomerModel;
 import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.persistance.entity.PostgresEntity.Customer;
 import com.example.petproject2.persistance.entity.PostgresEntity.CustomerProduct;
 import com.example.petproject2.persistance.entity.PostgresEntity.Product;
+import com.example.petproject2.persistance.mappers.PostgresMapper;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerProductRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.ProductRepository;
-import com.example.petproject2.presentation.mapper.MainMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
+@RequiredArgsConstructor
 public class PostgresRepository implements MainRepository {
-    @Autowired
-    CustomerRepository customerRepository;
-    @Autowired
-    ProductRepository productRepository;
-    @Autowired
-    CustomerProductRepository customerProductRepository;
 
-    @Autowired
-    PostgresMapper postgresMapper;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final CustomerProductRepository customerProductRepository;
+    private final PostgresMapper postgresMapper;
 
-    @Autowired
-    MainMapper mapper;
 
     @Transactional(readOnly = true)
     public List<CustomerModel> findAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
-        return postgresMapper.fromModelListEntity(customers);
+        return customers.stream().map(postgresMapper::toModel).collect(Collectors.toList());
     }
 
     @Transactional
@@ -66,19 +61,17 @@ public class PostgresRepository implements MainRepository {
     }
 
 
-
-
-    public List<ProductModel> findAllProducts(){
-        return postgresMapper.fromProductListEntity(productRepository.findAll());
+    public List<ProductModel> findAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(postgresMapper::toModel).collect(Collectors.toList());
     }
 
-    public ProductModel findProductById(String productId){
-        return postgresMapper.toModel(
-                productRepository.findById(Long.parseLong(productId)).orElseThrow());
+    public ProductModel findProductById(String productId) {
+        return postgresMapper.toModel(productRepository.findById(Long.parseLong(productId)).orElseThrow());
     }
 
     @Transactional
-    public ProductModel saveProduct(ProductModel productModel){
+    public ProductModel saveProduct(ProductModel productModel) {
         Product product = postgresMapper.toEntity(productModel);
         return postgresMapper.toModel(productRepository.save(product));
     }

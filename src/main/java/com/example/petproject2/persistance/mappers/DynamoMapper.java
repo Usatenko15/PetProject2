@@ -37,9 +37,4 @@ public interface DynamoMapper {
         productModel.setName(product.getName());
         return productModel;
     }
-
-//    List<DynamoCustomer> toModelListEntity(List<CustomerModel> customerModels);
-//    List<CustomerModel> fromModelListEntity(List<DynamoCustomer> customers);
-//    List<DynamoProduct> toProductListEntity(List<ProductModel> productModels);
-//    List<ProductModel> fromProductListEntity(List<DynamoProduct> products);
 }

@@ -28,11 +28,6 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.saveProductToCustomer(customerId, productId);
     }
 
-//    @Transactional
-//    public void deleteById(Long customerId) {
-//        postgresRepository.deleteById(customerId);
-//    }
-
     @Transactional(readOnly = true)
     public CustomerModel findById(String customerId) {
         return repository.findById(customerId);

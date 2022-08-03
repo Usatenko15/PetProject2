@@ -15,8 +15,5 @@ public interface MongoMapper {
     MongoProduct toEntity(ProductModel productModel);
     ProductModel toModel(MongoProduct product);
 
-    List<MongoCustomer> toModelListEntity(List<CustomerModel> customerModels);
-    List<CustomerModel> toModels(List<MongoCustomer> customers);
-    List<MongoProduct> toProductListEntity(List<ProductModel> productModels);
     List<ProductModel> toModel(List<MongoProduct> products);
 }

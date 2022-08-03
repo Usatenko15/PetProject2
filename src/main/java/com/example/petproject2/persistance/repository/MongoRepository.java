@@ -1,55 +1,51 @@
 package com.example.petproject2.persistance.repository;
 
-import com.example.petproject2.persistance.mappers.MongoMapper;
 import com.example.petproject2.domain.model.CustomerModel;
 import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoCustomer;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoProduct;
+import com.example.petproject2.persistance.mappers.MongoMapper;
 import com.example.petproject2.persistance.repository.mongorepository.CustomerMongoRepository;
 import com.example.petproject2.persistance.repository.mongorepository.ProductMongoRepository;
-import com.example.petproject2.presentation.mapper.MainMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
+@RequiredArgsConstructor
 public class MongoRepository implements MainRepository {
-    @Autowired
-    CustomerMongoRepository customerMongoRepository;
-    @Autowired
-    ProductMongoRepository productMongoRepository;
-    @Autowired
-    MainMapper mapper;
-    @Autowired
-    MongoMapper mongoMapper;
+    private final CustomerMongoRepository customerRepository;
+    private final ProductMongoRepository productRepository;
+    private final MongoMapper mongoMapper;
 
 
     @Transactional(readOnly = true)
     public List<CustomerModel> findAllCustomers() {
-        return mongoMapper.toModels(customerMongoRepository.findAll());
+        List<MongoCustomer> customers = customerRepository.findAll();
+        return customers.stream().map(mongoMapper::toModel).collect(Collectors.toList());
     }
 
     @Transactional
     public CustomerModel saveCustomer(CustomerModel customerModel) {
         MongoCustomer customer = mongoMapper.toEntity(customerModel);
-
-        return mongoMapper.toModel(customerMongoRepository.save(customer));
+        return mongoMapper.toModel(customerRepository.save(customer));
     }
 
     @Transactional
     public CustomerModel saveProductToCustomer(String customerId, String productId) {
-        CustomerModel customer = mongoMapper.toModel(customerMongoRepository.findById(customerId).orElseThrow());
-        ProductModel product = mongoMapper.toModel(productMongoRepository.findById(productId).orElseThrow());
+        CustomerModel customer = mongoMapper.toModel(customerRepository.findById(customerId).orElseThrow());
+        ProductModel product = mongoMapper.toModel(productRepository.findById(productId).orElseThrow());
         customer.getProducts().add(product);
         product.getCustomers().add(customer);
-        customerMongoRepository.save(mongoMapper.toEntity(customer));
+        customerRepository.save(mongoMapper.toEntity(customer));
         return customer;
     }
     @Transactional(readOnly = true)
     public CustomerModel findById(String customerId) {
-        MongoCustomer customerEntity = customerMongoRepository.findById(customerId).orElseThrow();
+        MongoCustomer customerEntity = customerRepository.findById(customerId).orElseThrow();
         CustomerModel customerModel = mongoMapper.toModel(customerEntity);
         List<ProductModel> productModels = customerModel.getProducts();
         customerModel.setProducts(productModels);
@@ -57,18 +53,19 @@ public class MongoRepository implements MainRepository {
     }
 
     public List<ProductModel> findAllProducts(){
-        return mongoMapper.toModel(productMongoRepository.findAll());
+        List<MongoProduct> products = productRepository.findAll();
+        return products.stream().map(mongoMapper::toModel).collect(Collectors.toList());
     }
 
     public ProductModel findProductById(String productId){
         return mongoMapper.toModel(
-                productMongoRepository.findById(productId).orElseThrow());
+                productRepository.findById(productId).orElseThrow());
     }
 
     @Transactional
     public ProductModel saveProduct(ProductModel productModel){
         MongoProduct product = mongoMapper.toEntity(productModel);
 
-        return mongoMapper.toModel(productMongoRepository.save(product));
+        return mongoMapper.toModel(productRepository.save(product));
     }
 }

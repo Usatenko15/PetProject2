@@ -2,62 +2,204 @@ package com.example.petproject2.presentation.controllers;
 
 import com.example.petproject2.domain.model.CustomerModel;
 import com.example.petproject2.domain.services.CustomerService;
-import com.example.petproject2.persistance.entity.PostgresEntity.Customer;
 import com.example.petproject2.presentation.DTO.CustomerDTO;
 import com.example.petproject2.presentation.mapper.MainMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CustomerController.class)
+@ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
-    @MockBean
+    @Mock
     private CustomerService customerService;
-    @MockBean
+    @Mock
     MainMapper mapper;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Captor
+    private ArgumentCaptor<CustomerModel> customerArgumentCaptor;
+
+    @InjectMocks
+    private CustomerController customerController;
 
     @Test
-    void findAll() {
+    void findAllCustomersCallsCustomerService() {
+        //given
+
+        //when
+        customerController.findAll();
+
+        //then
+        verify(customerService).findAllCustomers();
     }
 
     @Test
-    void saveCustomer() {
+    void findAllCustomersCallsMapsModelToDTOs() {
+        //given
+        var customer = new CustomerModel();
+
+        //when
+        when(customerService.findAllCustomers()).thenReturn(List.of(customer));
+
+        customerController.findAll();
+
+        //then
+        verify(mapper).toDTO(customerArgumentCaptor.capture());
+        assertEquals(customerArgumentCaptor.getValue(), customer);
     }
 
     @Test
-    void findById() throws Exception {
-        CustomerModel customerModel = new CustomerModel();
+    void findAllCustomersReturnsMappedCustomers() {
+        //given
+        var customerDTO = new CustomerDTO();
+        customerDTO.setCustomerId("1");
+        customerDTO.setName("customer");
+
+        //when
+        when(customerService.findAllCustomers()).thenReturn(List.of(new CustomerModel()));
+        when(mapper.toDTO(any(CustomerModel.class))).thenReturn(customerDTO);
+
+        customerController.findAll();
+
+        //then
+        assertEquals(customerDTO, customerController.findAll().get(0));
+    }
+
+    @Test
+    void saveCustomerCallsMapsDTOsToModel() {
+        //given
+        var customerDTO = new CustomerDTO();
+        customerDTO.setCustomerId("1");
+        customerDTO.setName("customer");
+
+        //when
+        customerController.saveCustomer(customerDTO);
+
+        //then
+        verify(mapper).toModel(customerDTO);
+    }
+
+    @Test
+    void saveCustomerCallsServiceSave() {
+        //given
+        var customerDTO = new CustomerDTO();
+        customerDTO.setCustomerId("1");
+        customerDTO.setName("customer");
+
+        var customerModel = new CustomerModel();
+        customerModel.setName("customer");
+
+        //when
+        when(mapper.toModel(any(CustomerDTO.class))).thenReturn(customerModel);
         customerModel.setCustomerId("1");
-        customerModel.setName("name");
+        customerController.saveCustomer(customerDTO);
 
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setCustomerId(customerModel.getCustomerId());
-        customerDTO.setName(customerModel.getName());
-
-        when(customerService.findById("1")).thenReturn(customerModel);
-        when(mapper.toDTO(customerModel)).thenReturn(customerDTO);
-
-        mockMvc.perform(get("http://localhost:8080/api/v1/customer/{id}", 1))
-                .andExpect(jsonPath("$.customerId").isNotEmpty())
-                .andExpect(jsonPath("$.name").isNotEmpty());
+        //then
+        verify(customerService).saveCustomer(customerModel);
     }
 
     @Test
-    void saveProductToCustomer() {
+    void saveCustomerReturnsMappedCustomer() {
+        //given
+        var customerDTO = new CustomerDTO();
+        customerDTO.setName("customer");
+
+        var customerDTO1 = new CustomerDTO();
+        customerDTO1.setCustomerId("1");
+        customerDTO1.setName("customer");
+
+        var customerModel = new CustomerModel();
+        customerModel.setName("customer");
+
+        //when
+        when(mapper.toModel(any(CustomerDTO.class))).thenReturn(customerModel);
+        customerModel.setCustomerId("1");
+        when(customerService.saveCustomer(any(CustomerModel.class))).thenReturn(customerModel);
+        customerDTO.setCustomerId("1");
+        when(mapper.toDTO(any(CustomerModel.class))).thenReturn(customerDTO);
+
+        customerController.saveCustomer(customerDTO);
+
+        //then
+        assertEquals(customerController.saveCustomer(customerDTO), customerDTO1);
+    }
+
+    @Test
+    void findByIdCallService() {
+        String customerId = "1";
+
+        //when
+        customerController.findById(customerId);
+
+        //then
+        verify(customerService).findById(customerId);
+    }
+
+    @Test
+    void findByIdCallMappedCustomer() {
+        String customerId = "1";
+
+        var customerDTO = new CustomerDTO();
+        customerDTO.setName("customer");
+        customerDTO.setCustomerId("1");
+
+        var customerModel = new CustomerModel();
+        customerModel.setName("customer");
+        customerModel.setCustomerId("1");
+
+
+        //when
+        when(customerService.findById(customerId)).thenReturn(customerModel);
+        when(mapper.toDTO(any(CustomerModel.class))).thenReturn(customerDTO);
+
+        customerController.findById(customerId);
+
+        //then
+        verify(mapper).toDTO(customerModel);
+        assertEquals(customerService.findById(customerId), customerModel);
+    }
+
+    @Test
+    void saveProductToCustomerCallsServiceSave() {
+        //given
+        String customerId = "1";
+        String productId = "1";
+
+        //when
+
+        customerController.saveProductToCustomer(customerId, productId);
+
+        //then
+        verify(customerService).saveProductToCustomer(customerId, productId);
+    }
+
+    @Test
+    void saveProductToCustomerMappedCustomer() {
+        //given
+        String customerId = "1";
+        String productId = "1";
+
+        var customer = new CustomerModel();
+        customer.setName("customer");
+        customer.setCustomerId("1l");
+
+        //when
+        when(customerService.saveProductToCustomer(customerId,productId)).thenReturn(customer);
+
+        customerController.saveProductToCustomer(customerId, productId);
+
+        //then
+        verify(mapper).toDTO(customerArgumentCaptor.capture());
+        assertEquals(customerArgumentCaptor.getValue(), customer);
     }
 }

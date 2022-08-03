@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -17,7 +18,7 @@ public class ProductController {
 
     @GetMapping()
     public List<ProductDTO> findAll() {
-        return mapper.toDTO(productService.findAllProducts());
+        return productService.findAllProducts().stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{productId}")
@@ -26,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ProductDTO saveCustomer(@RequestBody ProductDTO productDTO) {
+    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO) {
         return mapper.toDTO(productService.saveProduct(mapper.toModel(productDTO)));
     }
 }

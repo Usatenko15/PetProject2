@@ -2,7 +2,6 @@ package com.example.petproject2.persistance.repository.mongorepository;
 
 import com.example.petproject2.persistance.entity.MongoEntity.MongoCustomer;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoProduct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

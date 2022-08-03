@@ -86,12 +86,4 @@ public interface PostgresMapper {
 
         return productModel;
     }
-
-    List<Customer> toModelListEntity(List<CustomerModel> customerModels);
-
-    List<CustomerModel> fromModelListEntity(List<Customer> customers);
-
-    List<Product> toProductListEntity(List<ProductModel> productModels);
-
-    List<ProductModel> fromProductListEntity(List<Product> products);
 }
