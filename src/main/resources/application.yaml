@@ -13,6 +13,6 @@ spring:
     mongodb:
       database: dp_pet
 
-amazon:
-  aws:
-    accesskey:
+#amazon:
+#  aws:
+#    accesskey:
