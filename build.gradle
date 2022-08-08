@@ -21,6 +21,9 @@ configurations {
 repositories {
     mavenCentral()
 }
+task wrapperper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
