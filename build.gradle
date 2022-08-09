@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 task wrapperper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '7.5'
 }
 
 dependencies {
