@@ -1,10 +1,11 @@
-package com.example.petproject2.persistance.repository;
+package com.example.petproject2.unit.repository;
 
 import com.example.petproject2.domain.model.CustomerModel;
 import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoCustomer;
 import com.example.petproject2.persistance.entity.MongoEntity.MongoProduct;
 import com.example.petproject2.persistance.mappers.MongoMapper;
+import com.example.petproject2.persistance.repository.MongoRepository;
 import com.example.petproject2.persistance.repository.mongorepository.CustomerMongoRepository;
 import com.example.petproject2.persistance.repository.mongorepository.ProductMongoRepository;
 import org.junit.jupiter.api.Test;

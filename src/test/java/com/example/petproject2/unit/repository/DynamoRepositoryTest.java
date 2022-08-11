@@ -1,4 +1,4 @@
-package com.example.petproject2.persistance.repository;
+package com.example.petproject2.unit.repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -8,6 +8,7 @@ import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.persistance.entity.DynamoEntity.DynamoCustomer;
 import com.example.petproject2.persistance.entity.DynamoEntity.DynamoProduct;
 import com.example.petproject2.persistance.mappers.DynamoMapper;
+import com.example.petproject2.persistance.repository.DynamoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

@@ -49,11 +49,6 @@ public class PostgresRepository implements MainRepository {
         return postgresMapper.toModel(customer);
     }
 
-    @Transactional
-    public void deleteById(Long customerId) {
-        customerRepository.deleteById(customerId);
-    }
-
     @Transactional(readOnly = true)
     public CustomerModel findById(String customerId) {
         Customer customer = customerRepository.findById(Long.parseLong(customerId)).orElseThrow();

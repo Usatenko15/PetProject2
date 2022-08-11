@@ -5,6 +5,9 @@ plugins {
     id 'jacoco'
     id "org.flywaydb.flyway" version "9.0.1"
     id "org.sonarqube" version "3.4.0.2513"
+    id 'pl.allegro.tech.build.axion-release' version '1.13.6'
+    id 'com.palantir.docker' version '0.31.0'
+    id 'com.palantir.docker-run' version '0.31.0'
 //    id 'checkstyle'
 }
 
@@ -21,9 +24,9 @@ configurations {
 repositories {
     mavenCentral()
 }
-task wrapperper(type: Wrapper) {
-    gradleVersion = '7.5'
-}
+//task wrapperper(type: Wrapper) {
+//    gradleVersion = '7.5'
+//}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -44,6 +47,21 @@ dependencies {
 
     implementation 'org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184'
     implementation 'org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M7'
+}
+
+String imageName = "my/petproject2:$version"
+
+docker {
+    name imageName
+    files "build/libs/${bootJar.archiveFileName.get()}"
+    buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
+}
+
+dockerRun {
+    name project.name
+    image imageName
+    ports '8090:8090'
+    clean true
 }
 
 tasks.named('test') {

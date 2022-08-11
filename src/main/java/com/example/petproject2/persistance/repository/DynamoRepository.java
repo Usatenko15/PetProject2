@@ -28,10 +28,10 @@ public class DynamoRepository implements MainRepository {
     public List<CustomerModel> findAllCustomers() {
         PaginatedScanList<DynamoCustomer> customers = dynamoDBMapper.scan(DynamoCustomer.class, new DynamoDBScanExpression());
         return customers.parallelStream().map(customer -> {
-            CustomerModel customerModel = mapper.toModel(customer);
+            var customerModel = mapper.toModel(customer);
             customerModel.setProducts(customer.getProducts().parallelStream().map(s -> {
                 DynamoProduct product = (dynamoDBMapper.load(DynamoProduct.class, s));
-                ProductModel productModel = mapper.toModel(product);
+                var productModel = mapper.toModel(product);
                 productModel.setCustomers(product.getCustomers().parallelStream()
                         .map(s1 -> mapper.toModel(dynamoDBMapper.load(DynamoCustomer.class, s1)))
                         .collect(Collectors.toList()));
@@ -64,10 +64,10 @@ public class DynamoRepository implements MainRepository {
     @Override
     public CustomerModel findById(String customerId) {
         DynamoCustomer customer = dynamoDBMapper.load(DynamoCustomer.class, customerId);
-        CustomerModel customerModel = mapper.toModel(customer);
+        var customerModel = mapper.toModel(customer);
         customerModel.setProducts(customer.getProducts().parallelStream().map(s -> {
             DynamoProduct product = (dynamoDBMapper.load(DynamoProduct.class, s));
-            ProductModel productModel = mapper.toModel(product);
+            var productModel = mapper.toModel(product);
             productModel.setCustomers(product.getCustomers().parallelStream()
                     .map(s1 -> mapper.toModel(dynamoDBMapper.load(DynamoCustomer.class, s1)))
                     .collect(Collectors.toList()));
@@ -80,10 +80,10 @@ public class DynamoRepository implements MainRepository {
     public List<ProductModel> findAllProducts() {
         PaginatedScanList<DynamoProduct> products = dynamoDBMapper.scan(DynamoProduct.class, new DynamoDBScanExpression());
         return products.parallelStream().map(product -> {
-            ProductModel productModel = mapper.toModel(product);
+            var productModel = mapper.toModel(product);
             productModel.setCustomers(product.getCustomers().parallelStream().map(s -> {
                 DynamoCustomer customer = (dynamoDBMapper.load(DynamoCustomer.class, s));
-                CustomerModel customerModel = mapper.toModel(customer);
+                var customerModel = mapper.toModel(customer);
                 customerModel.setProducts(customer.getProducts().parallelStream()
                         .map(s1 -> mapper.toModel(dynamoDBMapper.load(DynamoProduct.class, s1)))
                         .collect(Collectors.toList()));
@@ -96,10 +96,10 @@ public class DynamoRepository implements MainRepository {
     @Override
     public ProductModel findProductById(String productId) {
         DynamoProduct product = dynamoDBMapper.load(DynamoProduct.class, productId);
-        ProductModel productModel = mapper.toModel(product);
+        var productModel = mapper.toModel(product);
         productModel.setCustomers(product.getCustomers().parallelStream().map(s -> {
             DynamoCustomer customer = (dynamoDBMapper.load(DynamoCustomer.class, s));
-            CustomerModel customerModel = mapper.toModel(customer);
+            var customerModel = mapper.toModel(customer);
             customerModel.setProducts(customer.getProducts().parallelStream()
                     .map(s1 -> mapper.toModel(dynamoDBMapper.load(DynamoProduct.class, s1)))
                     .collect(Collectors.toList()));

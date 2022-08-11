@@ -1,6 +1,7 @@
-package com.example.petproject2.domain.services;
+package com.example.petproject2.unit.services;
 
 import com.example.petproject2.domain.model.ProductModel;
+import com.example.petproject2.domain.services.ProductServiceImpl;
 import com.example.petproject2.persistance.repository.PostgresRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

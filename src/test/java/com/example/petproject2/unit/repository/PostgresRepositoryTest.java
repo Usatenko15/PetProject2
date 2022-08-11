@@ -1,4 +1,4 @@
-package com.example.petproject2.persistance.repository;
+package com.example.petproject2.unit.repository;
 
 import com.example.petproject2.domain.model.CustomerModel;
 import com.example.petproject2.domain.model.ProductModel;
@@ -6,6 +6,7 @@ import com.example.petproject2.persistance.entity.PostgresEntity.Customer;
 import com.example.petproject2.persistance.entity.PostgresEntity.CustomerProduct;
 import com.example.petproject2.persistance.entity.PostgresEntity.Product;
 import com.example.petproject2.persistance.mappers.PostgresMapper;
+import com.example.petproject2.persistance.repository.PostgresRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerProductRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.ProductRepository;

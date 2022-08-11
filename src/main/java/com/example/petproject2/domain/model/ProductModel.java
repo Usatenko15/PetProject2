@@ -1,13 +1,14 @@
 package com.example.petproject2.domain.model;
 
 import com.example.petproject2.persistance.entity.MongoEntity.MongoProduct;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = {"customers"})
 @NoArgsConstructor
 public class ProductModel {
     private String productId;

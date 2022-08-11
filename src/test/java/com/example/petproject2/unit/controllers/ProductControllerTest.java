@@ -1,8 +1,9 @@
-package com.example.petproject2.presentation.controllers;
+package com.example.petproject2.unit.controllers;
 
 import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.domain.services.ProductService;
 import com.example.petproject2.presentation.DTO.ProductDTO;
+import com.example.petproject2.presentation.controllers.ProductController;
 import com.example.petproject2.presentation.mapper.MainMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
