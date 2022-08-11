@@ -10,6 +10,7 @@ import com.example.petproject2.domain.services.ProductService;
 import com.example.petproject2.persistance.entity.DynamoEntity.DynamoCustomer;
 import com.example.petproject2.persistance.entity.DynamoEntity.DynamoProduct;
 import com.example.petproject2.persistance.repository.DynamoRepository;
+import com.example.petproject2.persistance.repository.PostgresRepository;
 import com.example.petproject2.presentation.controllers.ProductController;
 import com.example.petproject2.presentation.mapper.MainMapper;
 import org.junit.jupiter.api.Test;
@@ -40,11 +41,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@EnableAutoConfiguration(exclude = {
+        DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class,
+        HibernateJpaAutoConfiguration.class})
 class DynamoRepositoryTest {
 
     @MockBean
     @Qualifier("dynamoDBMapper")
     private DynamoDBMapper dynamoDBMapper;
+
+    @MockBean
+    PostgresRepository postgresRepository;
 
     @Autowired
     DynamoRepository repository;
