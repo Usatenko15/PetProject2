@@ -107,7 +107,7 @@ class ProductControllerTest {
 
         //then
         verify(mapper).toDTO(productModel);
-        assertEquals(productService.findProductById(productId), productModel);
+        assertEquals(productController.findById(productId), productDTO);
     }
 
     @Test

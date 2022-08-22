@@ -167,7 +167,7 @@ class CustomerControllerTest {
 
         //then
         verify(mapper).toDTO(customerModel);
-        assertEquals(customerService.findById(customerId), customerModel);
+        assertEquals(customerController.findById(customerId), customerDTO);
     }
 
     @Test
@@ -194,13 +194,19 @@ class CustomerControllerTest {
         customer.setName("customer");
         customer.setCustomerId("1l");
 
+        var customerDTO = new CustomerDTO();
+        customerDTO.setName("customer");
+        customerDTO.setCustomerId("1");
+
         //when
         when(customerService.saveProductToCustomer(customerId,productId)).thenReturn(customer);
+        when(mapper.toDTO(any(CustomerModel.class))).thenReturn(customerDTO);
 
-        customerController.saveProductToCustomer(customerId, productId);
+        CustomerDTO savedCustomer = customerController.saveProductToCustomer(customerId, productId);
 
         //then
         verify(mapper).toDTO(customerArgumentCaptor.capture());
         assertEquals(customerArgumentCaptor.getValue(), customer);
+        assertEquals(savedCustomer, customerDTO);
     }
 }

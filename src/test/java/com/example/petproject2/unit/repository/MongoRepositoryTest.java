@@ -321,19 +321,30 @@ class MongoRepositoryTest {
         customer.setName("customer");
         customer.setCustomerId("1");
 
+        var product = new MongoProduct();
+        customer.setName("product");
+        customer.setCustomerId("1");
+        customer.setMongoProducts(List.of(product));
+
         var customerModel = new CustomerModel();
         customerModel.setName("customer");
         customerModel.setCustomerId("1");
+
+        var productModel = new ProductModel();
+        customerModel.setName("product");
+        customerModel.setCustomerId("1");
+        customerModel.setProducts(List.of(productModel));
 
 
         //when
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(mapper.toModel(any(MongoCustomer.class))).thenReturn(customerModel);
 
-        repository.findById(customerId);
+        var findedCustomer = repository.findById(customerId);
 
         //then
-        assertEquals(repository.findById(customerId), customerModel);
+        assertEquals(findedCustomer, customerModel);
+        assertEquals(findedCustomer.getProducts().get(0), productModel);
     }
 
     @Test

@@ -1,9 +1,10 @@
 package com.example.petproject2.integration;
 
 import com.example.petproject2.domain.model.CustomerModel;
-import com.example.petproject2.domain.services.CustomerService;
+import com.example.petproject2.domain.model.ProductModel;
 import com.example.petproject2.persistance.entity.PostgresEntity.Customer;
 import com.example.petproject2.persistance.entity.PostgresEntity.Product;
+import com.example.petproject2.persistance.repository.PostgresRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerProductRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.CustomerRepository;
 import com.example.petproject2.persistance.repository.postgresrepository.ProductRepository;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
-public class CustomerServiceIntegrationTest {
+public class PostgresRepositoryTest {
 
     @MockBean
     CustomerRepository customerRepository;
@@ -39,7 +40,7 @@ public class CustomerServiceIntegrationTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private PostgresRepository postgresRepository;
 
     @Test
     void findById() {
@@ -50,7 +51,7 @@ public class CustomerServiceIntegrationTest {
         given(customerRepository.findById(1l)).willReturn(Optional.of(customer));
 
         // when
-        CustomerModel customerModel = customerService.findById("1");
+        CustomerModel customerModel = postgresRepository.findById("1");
 
         // then
         assertEquals(customer.getName(), customerModel.getName());
@@ -65,7 +66,7 @@ public class CustomerServiceIntegrationTest {
         given(customerRepository.findAll()).willReturn(List.of(customer));
 
         // when
-        CustomerModel customerModel = customerService.findAllCustomers().get(0);
+        CustomerModel customerModel = postgresRepository.findAllCustomers().get(0);
 
         // then
         assertEquals(customer.getName(), customerModel.getName());
@@ -84,7 +85,7 @@ public class CustomerServiceIntegrationTest {
         given(customerRepository.save(any())).willReturn(customer);
 
         // when
-        CustomerModel expectedCustomerModel = customerService.saveCustomer(customerModel);
+        CustomerModel expectedCustomerModel = postgresRepository.saveCustomer(customerModel);
 
         // then
         assertEquals(customerModel.getName(), expectedCustomerModel.getName());
@@ -106,10 +107,62 @@ public class CustomerServiceIntegrationTest {
         when(customerRepository.findById(any())).thenReturn(Optional.of(customer));
         when(productRepository.findById(any())).thenReturn(Optional.of(product));
 
-        CustomerModel expectedCustomerModel = customerService.saveProductToCustomer("1", "1");
+        CustomerModel expectedCustomerModel = postgresRepository.saveProductToCustomer("1", "1");
 
         //then
         assertEquals(customer.getName(), expectedCustomerModel.getName());
         assertEquals(customer.getCustomerId().toString(), expectedCustomerModel.getCustomerId());
+    }
+
+    @Test
+    void findProductById() {
+        // given
+        Product product = new Product();
+        product.setProductId(1l);
+        product.setName("name");
+
+        given(productRepository.findById(1l)).willReturn(Optional.of(product));
+
+        // when
+        ProductModel productModel = postgresRepository.findProductById("1");
+
+        // then
+        assertEquals(product.getName(), productModel.getName());
+    }
+
+    @Test
+    void findAllProducts() {
+        // given
+        Product product = new Product();
+        product.setProductId(1l);
+        product.setName("name");
+
+        given(productRepository.findAll()).willReturn(List.of(product));
+
+        // when
+        ProductModel productModel = postgresRepository.findAllProducts().get(0);
+
+        // then
+        assertEquals(product.getName(), productModel.getName());
+    }
+
+    @Test
+    void saveProduct() {
+        // given
+        ProductModel productModel = new ProductModel();
+        productModel.setName("name");
+
+        Product product = new Product();
+        product.setProductId(1l);
+        product.setName("name");
+
+        given(productRepository.save(any())).willReturn(product);
+
+        // when
+        ProductModel expectedProductModel = postgresRepository.saveProduct(productModel);
+
+        // then
+        assertEquals(productModel.getName(), expectedProductModel.getName());
+        assertEquals(product.getProductId().toString(), expectedProductModel.getProductId());
     }
 }

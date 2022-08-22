@@ -46,10 +46,7 @@ public class MongoRepository implements MainRepository {
     @Transactional(readOnly = true)
     public CustomerModel findById(String customerId) {
         MongoCustomer customerEntity = customerRepository.findById(customerId).orElseThrow();
-        CustomerModel customerModel = mongoMapper.toModel(customerEntity);
-        List<ProductModel> productModels = customerModel.getProducts();
-        customerModel.setProducts(productModels);
-        return customerModel;
+        return mongoMapper.toModel(customerEntity);
     }
 
     public List<ProductModel> findAllProducts(){
